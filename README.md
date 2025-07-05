@@ -2,21 +2,22 @@
 
 This project captures and tracks trending Reddit content by streaming hourly snapshots from Reddit's API into an AWS S3 bucket. The goal is to showcase real-time analytics using serverless tools while staying fully within AWS Free Tier limits.
 
-## Key Features
+## AWS Components
 
-- **Hourly Data Collection**: Automated Reddit API ingestion via EventBridge triggers
-- **Serverless Architecture**: Cost-effective, scalable design using AWS Free Tier
-- **Real-time Analytics**: Live dashboard with hourly data refresh
-- **Data Quality**: Automatic emoji removal and text sanitization
-- **Optimized Storage**: Date-partitioned S3 structure for efficient querying
+- **AWS Lambda**: Serverless function for Reddit API data ingestion
+- **Amazon EventBridge**: Automated hourly trigger scheduling
+- **Amazon S3**: Data lake with date-partitioned storage
+- **AWS Glue**: Schema discovery and data catalog management
+- **Amazon Athena**: SQL query engine
+- **Amazon QuickSight**: Visualization dashboard
 
 ## Architecture & Data Flow
 
 ```mermaid
 graph TB
     RedditAPI[Reddit API] 
-    EventBridge[EventBridge<br/>Hourly Trigger]
-    Lambda[Lambda Function<br/>Reddit Ingestion]
+    EventBridge[EventBridge<br/>]
+    Lambda[Lambda Function<br/>Data Ingestion & Storage]
     S3[S3 Bucket<br/>Data Lake]
     GlueCrawler[Glue Crawler<br/>Schema Discovery]
     DataCatalog[Glue Data Catalog<br/>Metadata]
@@ -24,7 +25,7 @@ graph TB
     QuickSight[QuickSight<br/>Dashboard]
     
     EventBridge -->|Triggers every hour| Lambda
-    Lambda -->|Fetches top 10 posts| RedditAPI
+    Lambda -->|Fetches & stores data| RedditAPI
     Lambda -->|Stores JSON Lines| S3
     S3 -->|Daily crawl| GlueCrawler
     GlueCrawler -->|Updates schema| DataCatalog
