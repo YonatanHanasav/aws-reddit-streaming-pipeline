@@ -1,0 +1,9 @@
+# AWS Reddit Streaming Pipeline Dependencies
+# Core AWS SDK
+boto3>=1.26.0
+
+# Reddit API wrapper
+praw>=7.7.0
+
+# Standard library modules (included with Python)
+# json, datetime, os, re - no need to include in requirements.txt 
