@@ -1,17 +1,16 @@
-# 🛰️ AWS Reddit Streaming Pipeline
+# AWS Reddit Streaming Pipeline
 
-A serverless, cost-effective data pipeline to stream Reddit data using AWS services.
+This project captures and tracks trending Reddit content by streaming hourly snapshots from Reddit's API into an AWS-based data lake. The goal is to showcase real-time analytics using serverless tools while staying fully within AWS Free Tier limits.
 
-## Tech Stack
+## Key Features
 
-- **AWS Lambda** – Reddit ingestion using PRAW
-- **Amazon EventBridge** – Hourly trigger scheduling
-- **Amazon S3** – Raw JSON Lines data storage
-- **AWS Glue** – Schema discovery using Crawler
-- **Amazon Athena** – Query raw data using SQL
-- **Amazon QuickSight** – Visualize trending posts
+- **Hourly Data Collection**: Automated Reddit API ingestion via EventBridge triggers
+- **Serverless Architecture**: Cost-effective, scalable design using AWS Free Tier
+- **Real-time Analytics**: Live dashboard with hourly data refresh
+- **Data Quality**: Automatic emoji removal and text sanitization
+- **Optimized Storage**: Date-partitioned S3 structure for efficient querying
 
-## Architecture
+## Architecture & Data Flow
 
 ```mermaid
 graph TB
@@ -42,14 +41,7 @@ graph TB
     class S3 data
 ```
 
-## Data Flow
-
-1. **EventBridge** triggers Lambda every hour
-2. **Lambda** fetches top 10 hot Reddit posts via PRAW
-3. **S3** stores data in JSON Lines format (`raw/YYYY-MM-DD/reddit_data_HH_MM_SS.json`)
-4. **Glue Crawler** scans data daily and updates schema
-5. **Athena** queries the cataloged data using SQL
-6. **QuickSight** visualizes trends and insights
+**Tech Stack**: AWS Lambda, EventBridge, S3, Glue, Athena, QuickSight, PRAW
 
 ## Sample Data
 
@@ -102,44 +94,3 @@ The pipeline collects Reddit posts in JSON Lines format. Here's a sample of the 
 ## Sample Dashboard
 
 ![quicksight](quicksight/dashboard_screenshot.png)
-
-## 📂 Folder Structure
-
-| Folder        | Description                      |
-|---------------|----------------------------------|
-| `lambda/`     | Reddit ingestion function        |
-| `athena/`     | Example SQL queries              |
-| `quicksight/` | Dashboard screenshots            |
-| `glue/`       | Crawler setup notes              |
-| `architecture/` | Architecture diagram (optional)|
-
-## Features
-
-### Hourly Reddit Data Pipeline
-- **Automated Collection**: Lambda function triggers every hour via EventBridge
-- **Real-time Data**: Captures current "hot" posts from Reddit
-- **Scalable Architecture**: Serverless design handles varying Reddit API response times
-- **Data Freshness**: Ensures up-to-date trending content for analysis
-- **Fault Tolerance**: Built-in error handling and retry mechanisms
-- **Monitoring**: CloudWatch logs track pipeline health and performance
-
-### Data Processing
-- **JSON Lines Format**: Optimized for AWS Glue schema discovery
-- **Data Cleaning**: Automatic emoji removal and text sanitization
-- **Structured Storage**: Date-partitioned S3 storage for efficient querying
-- **Metadata Enrichment**: Adds collection timestamps and processing flags
-
-### Cost Optimization
-- **Free Tier Compatible**: Designed to fit within AWS free tier limits
-- **Serverless Pricing**: Pay only for actual compute time and storage used
-- **Efficient Queries**: Athena queries optimized for cost-effective data analysis
-- **Lifecycle Management**: S3 lifecycle policies for long-term cost control
-
-## Setup Steps
-
-1. Deploy Lambda with env vars:
-   - `REDDIT_CLIENT_ID`, `REDDIT_SECRET`, etc.
-2. Point to S3 path: `s3://your-bucket/raw/YYYY-MM-DD/`
-3. Configure Glue Crawler (no classifier, JSON format).
-4. Run Athena queries (see `athena/` folder).
-5. Build QuickSight dashboard.
