@@ -1,6 +1,6 @@
 # AWS Reddit Streaming Pipeline
 
-This project captures and tracks trending Reddit content by streaming hourly snapshots from Reddit's API into an AWS-based data lake. The goal is to showcase real-time analytics using serverless tools while staying fully within AWS Free Tier limits.
+This project captures and tracks trending Reddit content by streaming hourly snapshots from Reddit's API into an AWS S3 bucket. The goal is to showcase real-time analytics using serverless tools while staying fully within AWS Free Tier limits.
 
 ## Key Features
 
