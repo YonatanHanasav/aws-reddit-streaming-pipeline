@@ -25,7 +25,6 @@ graph TB
     QuickSight[QuickSight<br/>Dashboard]
     
     EventBridge -->|Triggers every hour| Lambda
-    Lambda -->|Fetches & stores data| RedditAPI
     Lambda -->|Stores JSON Lines| S3
     S3 -->|Daily crawl| GlueCrawler
     GlueCrawler -->|Updates schema| DataCatalog
