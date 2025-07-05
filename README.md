@@ -14,10 +14,9 @@ This project captures and tracks trending Reddit content by streaming hourly sna
 ## Architecture & Data Flow
 
 ```mermaid
-graph TB
-    RedditAPI[Reddit API] 
+graph TB 
     EventBridge[EventBridge<br/>]
-    Lambda[Lambda Function<br/>Data Ingestion & Storage]
+    Lambda[Lambda Function<br/>Reddit API extraction]
     S3[S3 Bucket<br/>Data Lake]
     GlueCrawler[Glue Crawler<br/>Schema Discovery]
     DataCatalog[Glue Data Catalog<br/>Metadata]
@@ -25,7 +24,7 @@ graph TB
     QuickSight[QuickSight<br/>Dashboard]
     
     EventBridge -->|Triggers every hour| Lambda
-    Lambda -->|Stores JSON Lines| S3
+    Lambda -->|Store JSON files| S3
     S3 -->|Daily crawl| GlueCrawler
     GlueCrawler -->|Updates schema| DataCatalog
     DataCatalog -->|Provides metadata| Athena
