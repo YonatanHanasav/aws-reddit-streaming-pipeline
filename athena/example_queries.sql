@@ -1,5 +1,5 @@
 -- Example Athena SQL queries for Reddit data analysis
--- Replace 'your_database' and 'your_table' with your actual database and table names
+-- Database: reddit_streaming_db, Table: raw
 
 -- Query 1: Get top posts by score for a specific date
 SELECT 
@@ -9,8 +9,8 @@ SELECT
     num_comments,
     created_utc,
     subreddit
-FROM your_database.your_table
-WHERE DATE(from_unixtime(created_utc)) = '2024-01-01'
+FROM reddit_streaming_db.raw
+WHERE SUBSTRING(created_utc, 1, 10) = '2025-07-05'
 ORDER BY score DESC
 LIMIT 10;
 
@@ -20,18 +20,18 @@ SELECT
     COUNT(*) as post_count,
     AVG(score) as avg_score,
     AVG(num_comments) as avg_comments
-FROM your_database.your_table
+FROM reddit_streaming_db.raw
 GROUP BY subreddit
 ORDER BY avg_score DESC;
 
 -- Query 3: Get hourly post trends
 SELECT 
-    DATE(from_unixtime(created_utc)) as post_date,
-    HOUR(from_unixtime(created_utc)) as post_hour,
+    SUBSTRING(created_utc, 1, 10) as post_date,
+    SUBSTRING(created_utc, 12, 2) as post_hour,
     COUNT(*) as posts_count,
     AVG(score) as avg_score
-FROM your_database.your_table
-GROUP BY DATE(from_unixtime(created_utc)), HOUR(from_unixtime(created_utc))
+FROM reddit_streaming_db.raw
+GROUP BY SUBSTRING(created_utc, 1, 10), SUBSTRING(created_utc, 12, 2)
 ORDER BY post_date DESC, post_hour;
 
 -- Query 4: Get top authors by total score
@@ -40,8 +40,33 @@ SELECT
     COUNT(*) as posts_count,
     SUM(score) as total_score,
     AVG(score) as avg_score
-FROM your_database.your_table
+FROM reddit_streaming_db.raw
 WHERE author != '[deleted]'
 GROUP BY author
 ORDER BY total_score DESC
-LIMIT 20; 
+LIMIT 20;
+
+-- Query 5: Get recent posts with high engagement
+SELECT 
+    title,
+    author,
+    subreddit,
+    score,
+    num_comments,
+    created_utc,
+    fetched_utc
+FROM reddit_streaming_db.raw
+WHERE score > 1000
+ORDER BY created_utc DESC
+LIMIT 20;
+
+-- Query 6: Get posts by content type (image, video, text)
+SELECT 
+    post_hint,
+    COUNT(*) as post_count,
+    AVG(score) as avg_score,
+    AVG(num_comments) as avg_comments
+FROM reddit_streaming_db.raw
+WHERE post_hint IS NOT NULL
+GROUP BY post_hint
+ORDER BY avg_score DESC; 

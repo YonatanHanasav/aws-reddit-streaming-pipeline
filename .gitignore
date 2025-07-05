@@ -85,4 +85,7 @@ coverage.xml
 # mypy
 .mypy_cache/
 .dmypy.json
-dmypy.json 
+dmypy.json
+
+# Sample data (contains real Reddit data)
+sample_data/ 

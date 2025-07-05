@@ -51,7 +51,7 @@ graph TB
 5. **Athena** queries the cataloged data using SQL
 6. **QuickSight** visualizes trends and insights
 
-## 📊 Sample Data
+## Sample Data
 
 The pipeline collects Reddit posts in JSON Lines format. Here's a sample of the data structure:
 
