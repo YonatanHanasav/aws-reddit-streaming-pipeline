@@ -40,8 +40,6 @@ graph TB
     class S3 data
 ```
 
-**Tech Stack**: AWS Lambda, EventBridge, S3, Glue, Athena, QuickSight, PRAW
-
 ## Sample Data
 
 The pipeline collects Reddit posts in JSON Lines format. Here's a sample of the data structure:
